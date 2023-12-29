@@ -1,8 +1,7 @@
 import { Button, InputBase } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRef, useState } from 'react';
-import useApi from '../hooks/useApi';
-import useUserActions from '../hooks/useUserActions';
+import useWeatherApi from '../hooks/useWeatherApi';
 
 const BootstrapInput = styled(InputBase)(() => ({
   '& .MuiInputBase-input': {
@@ -30,14 +29,25 @@ const BootstrapInput = styled(InputBase)(() => ({
   },
 }));
 
+interface FormDataType {
+  name: string;
+  email: string;
+  city: string;
+}
+
+const defaultFormData = {
+  name: '',
+  email: '',
+  city: '',
+};
+
 const FormComp = () => {
   const nameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const cityRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
-  const [city, setCity] = useState('');
-  const { data, loading } = useApi(city);
-  const { addUser } = useUserActions();
+  const [formData, setFormData] = useState<FormDataType>(defaultFormData);
+  const { isLoading } = useWeatherApi(formData);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -50,23 +60,14 @@ const FormComp = () => {
     const email = emailRef.current.value;
     const city = cityRef.current.value;
 
-    const userData = {
+    console.log(isLoading);
+
+    setFormData({
       name,
       email,
       city,
-      lat: 38.7072,
-      long: -9.1355,
-      date: new Date().toISOString(),
-      temperature: 0,
-      humidity: 0,
-      wind_speed: 0,
-    };
+    });
 
-    setCity(city);
-
-    // if (!loading) {
-    // }
-    addUser(userData);
     formRef.current?.reset();
   };
 

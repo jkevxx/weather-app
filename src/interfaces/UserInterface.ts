@@ -1,24 +1,18 @@
+import { DaysInterface } from './WeatherInterface';
+
 export type UserId = string;
 
-export interface FutureWeather {
-  date: string;
-  temperature: number;
-  humidity: number;
-  wind_speed: number;
-}
-
 export interface UserInterface {
-  // id?: string;
   name: string;
   email: string;
   city: string;
   lat: number;
   long: number;
   date: string;
-  temperature: number;
+  temp: number;
   humidity: number;
-  wind_speed: number;
-  // future_weather: FutureWeather[];
+  windspeed: number;
+  days: DaysInterface[];
 }
 
 export interface UserInterfaceWithId extends UserInterface {

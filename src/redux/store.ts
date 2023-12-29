@@ -1,6 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { setupListeners } from '@reduxjs/toolkit/query';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { weatherApi } from './api/apiSlice';
 import usersReducer from './user/userSlice';
 
 const persistConfig = {
@@ -16,23 +18,18 @@ const rootReducer = combineReducers({
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-// const persistanceLocalStorageMiddleware = (store) => (next) => (action) => {
-//   next(action);
-//   localStorage.setItem('__redux__state__', JSON.stringify(store.getState()));
-// };
-
 export const store = configureStore({
   reducer: {
     users: persistedReducer,
-    // users: usersReducer,
+    [weatherApi.reducerPath]: weatherApi.reducer,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware().concat(persistanceLocalStorageMiddleware),
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat(weatherApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+setupListeners(store.dispatch);

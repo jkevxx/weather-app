@@ -14,9 +14,10 @@ const DEFAULT_STATE = [
     lat: 40.7128,
     long: -74.006,
     date: '2022-01-01',
-    temperature: 25,
+    temp: 25,
     humidity: 50,
-    wind_speed: 10,
+    windspeed: 10,
+    days: [],
   },
   {
     id: '2',
@@ -26,25 +27,12 @@ const DEFAULT_STATE = [
     lat: 40.7128,
     long: -74.006,
     date: '2022-01-01',
-    temperature: 25,
+    temp: 25,
     humidity: 50,
-    wind_speed: 10,
+    windspeed: 10,
+    days: [],
   },
 ];
-
-// let initialState: UserInterfaceWithId[] = DEFAULT_STATE;
-// const persistedState = localStorage.getItem('__redux__state__');
-// if (persistedState) {
-//   initialState = JSON.parse(persistedState).users;
-// }
-
-// const initialState: UserInterfaceWithId[] = (() => {
-//   const persistedState = localStorage.getItem('__redux__state__');
-//   if (persistedState) {
-//     return JSON.parse(persistedState).users;
-//   }
-//   return DEFAULT_STATE;
-// })();
 
 const initialState: UserInterfaceWithId[] = DEFAULT_STATE;
 

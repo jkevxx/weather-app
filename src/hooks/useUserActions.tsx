@@ -20,9 +20,10 @@ const useUserActions = () => {
     lat,
     long,
     date,
-    temperature,
+    temp,
     humidity,
-    wind_speed,
+    windspeed,
+    days,
   }: UserInterface) => {
     dispatch(
       createUser({
@@ -32,9 +33,10 @@ const useUserActions = () => {
         lat,
         long,
         date,
-        temperature,
+        temp,
         humidity,
-        wind_speed,
+        windspeed,
+        days,
       })
     );
   };
@@ -47,9 +49,10 @@ const useUserActions = () => {
     lat,
     long,
     date,
-    temperature,
+    temp,
     humidity,
-    wind_speed,
+    windspeed,
+    days,
   }: UserInterfaceWithId) => {
     dispatch(
       updateUserById({
@@ -60,9 +63,10 @@ const useUserActions = () => {
         lat,
         long,
         date,
-        temperature,
+        temp,
         humidity,
-        wind_speed,
+        windspeed,
+        days,
       })
     );
   };
