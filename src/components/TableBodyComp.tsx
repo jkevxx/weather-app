@@ -7,7 +7,7 @@ import { useAppSelector } from '../hooks/storeHook';
 import useUserActions from '../hooks/useUserActions';
 
 const TableBodyComp = () => {
-  const users = useAppSelector((state) => state.users.users);
+  const users = useAppSelector((state) => state.users);
   const { removeUser } = useUserActions();
   const redirect = useNavigate();
 

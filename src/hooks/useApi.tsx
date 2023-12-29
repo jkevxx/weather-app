@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const apiUrl = 'FEHRD4VQ2RBHX7JSFGZ9PJCNG';
+// const apiUrl = 'FEHRD4VQ2RBHX7JSFGZ9PJCNG';
 
 const useApi = (city: string) => {
   const [data, setData] = useState();

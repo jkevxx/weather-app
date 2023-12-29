@@ -38,15 +38,15 @@ const DEFAULT_STATE = [
 //   initialState = JSON.parse(persistedState).users;
 // }
 
-// const initialState: UserInterfaceWithId[] = (() => {
-//   const persistedState = localStorage.getItem('__redux__state__');
-//   if (persistedState) {
-//     return JSON.parse(persistedState).users;
-//   }
-//   return DEFAULT_STATE;
-// })();
+const initialState: UserInterfaceWithId[] = (() => {
+  const persistedState = localStorage.getItem('__redux__state__');
+  if (persistedState) {
+    return JSON.parse(persistedState).users;
+  }
+  return DEFAULT_STATE;
+})();
 
-const initialState: UserInterfaceWithId[] = DEFAULT_STATE;
+// const initialState: UserInterfaceWithId[] = DEFAULT_STATE;
 
 export const usersSlice = createSlice({
   name: 'users',
