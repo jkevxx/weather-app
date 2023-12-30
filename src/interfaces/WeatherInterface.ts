@@ -14,9 +14,10 @@ export interface WeatherApiDataInterface {
 }
 
 export interface WeatherForm {
+  id?: string;
+  city: string;
   name: string;
   email: string;
-  city: string;
 }
 
 export interface DaysInterface extends ConditionsInterface {

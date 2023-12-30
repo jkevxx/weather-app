@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import ModalComp from '../components/ModalComp';
+import DialogComp from '../components/DialogComp';
 import TableComp from '../components/TableComp';
 
 const Home = () => {
@@ -24,7 +24,7 @@ const Home = () => {
             alignItems: 'center',
           }}
         >
-          <ModalComp />
+          <DialogComp />
         </Box>
 
         <TableComp />

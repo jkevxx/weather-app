@@ -1,7 +1,9 @@
 import { Button, InputBase } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import useWeatherApi from '../hooks/useWeatherApi';
+import { PropsSelectedUser } from '../interfaces/UserInterface';
+import { WeatherForm } from '../interfaces/WeatherInterface';
 
 const BootstrapInput = styled(InputBase)(() => ({
   '& .MuiInputBase-input': {
@@ -29,46 +31,93 @@ const BootstrapInput = styled(InputBase)(() => ({
   },
 }));
 
-interface FormDataType {
-  name: string;
-  email: string;
-  city: string;
-}
-
 const defaultFormData = {
+  id: '',
   name: '',
   email: '',
   city: '',
 };
 
-const FormComp = () => {
-  const nameRef = useRef<HTMLInputElement>(null);
-  const emailRef = useRef<HTMLInputElement>(null);
-  const cityRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-  const [formData, setFormData] = useState<FormDataType>(defaultFormData);
-  const { isLoading } = useWeatherApi(formData);
+type Props = {
+  selectedUser: PropsSelectedUser | null;
+  onClose: () => void;
+};
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+const FormComp = ({ selectedUser, onClose }: Props) => {
+  // const nameRef = useRef<HTMLInputElement>(null);
+  // const emailRef = useRef<HTMLInputElement>(null);
+  // const cityRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [formData, setFormData] = useState<WeatherForm>(defaultFormData);
+  // const [city, setCity] = useState('');
+  const [sendData, setSendData] = useState<WeatherForm>(defaultFormData);
+
+  const { isLoading, fetchData } = useWeatherApi(sendData);
+
+  useEffect(() => {
+    if (selectedUser) {
+      setFormData(selectedUser);
+      // setCity(selectedUser.city);
+    } else {
+      setFormData(defaultFormData);
+      // setCity('');
+    }
+  }, [selectedUser]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    console.log(formData);
+  };
+
+  // const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { value } = e.target;
+  //   setCity(value);
+  // };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!nameRef.current || !emailRef.current || !cityRef.current) {
-      return;
+    // if (!nameRef.current || !emailRef.current || !cityRef.current) {
+    //   return;
+    // }
+
+    // const name = nameRef.current.value;
+    // const email = emailRef.current.value;
+    // const city = cityRef.current.value;
+
+    const { id, name, email, city } = formData;
+
+    console.log('formComp', isLoading);
+
+    console.log(sendData.id);
+
+    if (id) {
+      setSendData((prevData) => ({
+        ...prevData,
+        id: selectedUser ? selectedUser.id : '',
+        name: name,
+        email: email,
+        city: city,
+      }));
+      console.log(sendData);
+      await fetchData();
+    } else {
+      setSendData((prevData) => ({
+        ...prevData,
+        name,
+        email,
+        city,
+      }));
     }
 
-    const name = nameRef.current.value;
-    const email = emailRef.current.value;
-    const city = cityRef.current.value;
+    // await fetchData();
 
-    console.log(isLoading);
-
-    setFormData({
-      name,
-      email,
-      city,
-    });
-
-    formRef.current?.reset();
+    onClose();
+    // formRef.current?.reset();
   };
 
   return (
@@ -76,34 +125,37 @@ const FormComp = () => {
       <BootstrapInput
         id="name"
         name="name"
-        inputRef={nameRef}
+        // inputRef={nameRef}
         fullWidth
         placeholder="Nombre y Apellidos"
         type="text"
-        // defaultValue=""
-        // value=""
+        // defaultValue={formData.name}
+        value={formData.name}
+        onChange={handleInputChange}
         required
       />
       <BootstrapInput
         id="email"
         name="email"
-        inputRef={emailRef}
+        // inputRef={emailRef}
         fullWidth
         placeholder="Correo"
         type="email"
-        // defaultValue=""
-        // value=""
+        // defaultValue={formData.email}
+        value={formData.email}
+        onChange={handleInputChange}
         required
       />
       <BootstrapInput
         id="city"
         name="city"
-        inputRef={cityRef}
+        // inputRef={cityRef}
         fullWidth
         placeholder="Ciudad"
         type="text"
-        // defaultValue=""
-        // value=""
+        // defaultValue={formData.city}
+        value={formData.city}
+        onChange={handleInputChange}
         required
       />
       <Button
@@ -113,7 +165,7 @@ const FormComp = () => {
         color="info"
         type="submit"
       >
-        Crear
+        {selectedUser ? 'Editar' : 'Crear'}
       </Button>
     </form>
   );

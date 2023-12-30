@@ -1,67 +1,45 @@
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import { Box, Button, Modal, Typography } from '@mui/material';
-import { useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { PropsSelectedUser } from '../interfaces/UserInterface';
 import FormComp from './FormComp';
 
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: 440,
-  width: '100%',
-  color: '#fff',
-  bgcolor: '#31343b',
-  // border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
-const ModalComp = () => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+interface Props {
+  open: boolean;
+  onClose: () => void;
+  isSelectedUser: PropsSelectedUser | null;
+}
 
+const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
   return (
-    <div>
-      <Button
-        onClick={handleOpen}
-        variant="contained"
-        startIcon={<AddBoxIcon />}
-        color="success"
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle
+        sx={{
+          fontWeight: 'bold',
+          textAlign: 'center',
+          bgcolor: '#31343b',
+          color: '#fff',
+        }}
       >
-        Add New User
-      </Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          <Box sx={{ position: 'absolute', top: 10, right: 0 }}>
-            <Button onClick={handleClose} color="error">
-              <CloseOutlinedIcon />
-            </Button>
-          </Box>
+        {isSelectedUser ? 'Editar Usuario' : 'Crear Nuevo Usuario'}
+      </DialogTitle>
 
-          <Typography
-            id="modal-modal-title"
-            sx={{
-              mb: 2,
-              fontWeight: 'bold',
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-            variant="h6"
-            component="h2"
-          >
-            Crear Nuevo Usuario
-          </Typography>
-          <FormComp />
-        </Box>
-      </Modal>
-    </div>
+      <IconButton
+        aria-label="close"
+        onClick={onClose}
+        sx={{
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          color: (theme) => theme.palette.grey[500],
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+
+      <DialogContent sx={{ bgcolor: '#31343b' }} dividers>
+        <FormComp selectedUser={isSelectedUser} onClose={onClose} />
+      </DialogContent>
+    </Dialog>
   );
 };
 

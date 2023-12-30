@@ -18,3 +18,10 @@ export interface UserInterface {
 export interface UserInterfaceWithId extends UserInterface {
   id: UserId;
 }
+
+export interface PropsSelectedUser {
+  id: string;
+  name: string;
+  email: string;
+  city: string;
+}
