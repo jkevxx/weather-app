@@ -10,6 +10,7 @@ import {
   PropsSelectedUser,
   UserInterfaceWithId,
 } from '../interfaces/UserInterface';
+import ConfirmDelete from './ConfirmDelete';
 import ModalComp from './ModalComp';
 
 const TableBodyComp = () => {
@@ -17,6 +18,9 @@ const TableBodyComp = () => {
   const { removeUser } = useUserActions();
   const redirect = useNavigate();
   const [selectedUser, setSelectedUser] = useState<PropsSelectedUser | null>();
+  const [isDeleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [userSelected, setUserSelected] = useState<PropsSelectedUser>();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleRedirect = (userId: string) => {
     redirect(`/user/${userId}`);
@@ -25,6 +29,26 @@ const TableBodyComp = () => {
   const handleEdit = (user: UserInterfaceWithId) => {
     const { id, name, email, city } = user;
     setSelectedUser({ id, name, email, city });
+  };
+
+  const handleDelete = (user: PropsSelectedUser) => {
+    setDeleteDialogOpen(true);
+
+    setUserSelected(user);
+  };
+
+  const confirmDelete = () => {
+    setIsDeleting(true);
+    if (userSelected) {
+      removeUser(userSelected.id);
+      setIsDeleting(false);
+    }
+
+    setDeleteDialogOpen(false);
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialogOpen(false);
   };
 
   return (
@@ -91,15 +115,16 @@ const TableBodyComp = () => {
                   variant="contained"
                   color="error"
                   startIcon={<DeleteIcon />}
-                  onClick={() => removeUser(user.id)}
+                  onClick={() => handleDelete(user)}
                 >
-                  Delete
+                  Borrar
                 </Button>
               </TableCell>
             </TableRow>
           );
         })}
       </TableBody>
+
       {selectedUser && (
         <ModalComp
           open={true}
@@ -107,6 +132,14 @@ const TableBodyComp = () => {
           isSelectedUser={selectedUser}
         />
       )}
+
+      <ConfirmDelete
+        onOpen={isDeleteDialogOpen}
+        onClose={cancelDelete}
+        onConfirm={confirmDelete}
+        selectedUser={userSelected || null}
+        isDeleting={isDeleting}
+      />
     </>
   );
 };

@@ -1,7 +1,6 @@
 import { Button, InputBase } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect, useRef, useState } from 'react';
-import useWeatherApi from '../hooks/useWeatherApi';
+import { useEffect, useState } from 'react';
 import { PropsSelectedUser } from '../interfaces/UserInterface';
 import { WeatherForm } from '../interfaces/WeatherInterface';
 
@@ -41,26 +40,16 @@ const defaultFormData = {
 type Props = {
   selectedUser: PropsSelectedUser | null;
   onClose: () => void;
+  onCreate: (data: WeatherForm) => void;
+  onUpdate: (data: WeatherForm) => Promise<void>;
 };
 
-const FormComp = ({ selectedUser, onClose }: Props) => {
-  // const nameRef = useRef<HTMLInputElement>(null);
-  // const emailRef = useRef<HTMLInputElement>(null);
-  // const cityRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
+const FormComp = ({ selectedUser, onCreate, onUpdate, onClose }: Props) => {
   const [formData, setFormData] = useState<WeatherForm>(defaultFormData);
-  // const [city, setCity] = useState('');
-  const [sendData, setSendData] = useState<WeatherForm>(defaultFormData);
-
-  const { isLoading, fetchData } = useWeatherApi(sendData);
 
   useEffect(() => {
     if (selectedUser) {
       setFormData(selectedUser);
-      // setCity(selectedUser.city);
-    } else {
-      setFormData(defaultFormData);
-      // setCity('');
     }
   }, [selectedUser]);
 
@@ -70,66 +59,29 @@ const FormComp = ({ selectedUser, onClose }: Props) => {
       ...formData,
       [name]: value,
     });
-    console.log(formData);
   };
-
-  // const handleCityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { value } = e.target;
-  //   setCity(value);
-  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!nameRef.current || !emailRef.current || !cityRef.current) {
-    //   return;
-    // }
-
-    // const name = nameRef.current.value;
-    // const email = emailRef.current.value;
-    // const city = cityRef.current.value;
-
-    const { id, name, email, city } = formData;
-
-    console.log('formComp', isLoading);
-
-    console.log(sendData.id);
-
-    if (id) {
-      setSendData((prevData) => ({
-        ...prevData,
-        id: selectedUser ? selectedUser.id : '',
-        name: name,
-        email: email,
-        city: city,
-      }));
-      console.log(sendData);
-      await fetchData();
+    if (formData.id) {
+      await onUpdate(formData);
     } else {
-      setSendData((prevData) => ({
-        ...prevData,
-        name,
-        email,
-        city,
-      }));
+      onCreate(formData);
     }
 
-    // await fetchData();
-
+    setFormData(defaultFormData);
     onClose();
-    // formRef.current?.reset();
   };
 
   return (
-    <form ref={formRef} onSubmit={handleSubmit} autoComplete={'off'}>
+    <form onSubmit={handleSubmit} autoComplete={'off'}>
       <BootstrapInput
         id="name"
         name="name"
-        // inputRef={nameRef}
         fullWidth
         placeholder="Nombre y Apellidos"
         type="text"
-        // defaultValue={formData.name}
         value={formData.name}
         onChange={handleInputChange}
         required
@@ -137,11 +89,9 @@ const FormComp = ({ selectedUser, onClose }: Props) => {
       <BootstrapInput
         id="email"
         name="email"
-        // inputRef={emailRef}
         fullWidth
         placeholder="Correo"
         type="email"
-        // defaultValue={formData.email}
         value={formData.email}
         onChange={handleInputChange}
         required
@@ -149,11 +99,9 @@ const FormComp = ({ selectedUser, onClose }: Props) => {
       <BootstrapInput
         id="city"
         name="city"
-        // inputRef={cityRef}
         fullWidth
         placeholder="Ciudad"
         type="text"
-        // defaultValue={formData.city}
         value={formData.city}
         onChange={handleInputChange}
         required
@@ -165,7 +113,7 @@ const FormComp = ({ selectedUser, onClose }: Props) => {
         color="info"
         type="submit"
       >
-        {selectedUser ? 'Editar' : 'Crear'}
+        {selectedUser ? 'Actualizar' : 'Crear'}
       </Button>
     </form>
   );
