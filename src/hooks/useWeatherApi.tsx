@@ -6,7 +6,8 @@ import {
   WeatherForm,
 } from '../interfaces/WeatherInterface';
 import { useGetWeatherQuery } from '../redux/api/apiSlice';
-import { getCurrentDate, getDay5 } from '../utils/getDate';
+import { getCurrentDate, getDateDashFormat, getDay5 } from '../utils/getDate';
+import { IconsDescription } from '../utils/weatherIcons';
 import useUserActions from './useUserActions';
 
 const useWeatherApi = ({ id, name, email, city }: WeatherForm) => {
@@ -26,36 +27,39 @@ const useWeatherApi = ({ id, name, email, city }: WeatherForm) => {
       if (!city || isLoading || error) {
         return;
       }
-      // console.log(id, email, city);
-
       if (data && !isLoading) {
-        const { address, latitude, longitude, currentConditions, days } =
-          data as WeatherApiDataInterface;
+        const {
+          resolvedAddress,
+          latitude,
+          longitude,
+          currentConditions,
+          days,
+        } = data as WeatherApiDataInterface;
 
-        const { datetimeEpoch, temp, humidity, windspeed } = currentConditions;
+        const { datetimeEpoch, temp, humidity, windspeed, conditions } =
+          currentConditions;
 
         const dayProperties = days.map((day: DaysInterface) => {
           return {
             datetimeEpoch: day.datetimeEpoch,
-            datetime: day.datetime,
+            datetime: getDateDashFormat(day.datetimeEpoch),
             temp: day.temp,
             humidity: day.humidity,
             windspeed: day.windspeed,
             conditions: day.conditions,
+            icon: getIconId(day.conditions),
           };
         });
-
-        const fullDate = new Date(parseFloat(datetimeEpoch) * 1000);
 
         const weatherInfo: UserInterface = {
           name,
           email,
-          city: address,
+          city: resolvedAddress,
           lat: latitude,
           long: longitude,
-          date: `${fullDate.getDate()}-${
-            fullDate.getMonth() + 1
-          }-${fullDate.getFullYear()}`,
+          date: getDateDashFormat(datetimeEpoch),
+          conditions,
+          icon: getIconId(conditions),
           temp,
           humidity,
           windspeed,
@@ -72,6 +76,13 @@ const useWeatherApi = ({ id, name, email, city }: WeatherForm) => {
     } catch (error) {
       console.error('Error fetching weather data:', error);
     }
+  };
+
+  const getIconId = (keyword: string) => {
+    const matchingIcon = IconsDescription.find((iconObj) =>
+      iconObj.keywords.some((kw) => kw.toLowerCase() === keyword.toLowerCase())
+    );
+    return matchingIcon?.icon || '';
   };
 
   useEffect(() => {
