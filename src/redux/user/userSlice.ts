@@ -4,39 +4,7 @@ import {
   UserInterface,
   UserInterfaceWithId,
 } from '../../interfaces/UserInterface';
-
-const DEFAULT_STATE = [
-  {
-    id: '1',
-    name: 'Dave Doe',
-    email: 'I4QpO@example.com',
-    city: 'New York',
-    lat: 40.7128,
-    long: -74.006,
-    date: '2022-01-01',
-    conditions: 'sunny',
-    icon: '01d',
-    temp: 25,
-    humidity: 50,
-    windspeed: 10,
-    days: [],
-  },
-  {
-    id: '2',
-    name: 'Jane Doe',
-    email: 'I4QpO@example.com',
-    city: 'New York',
-    lat: 40.7128,
-    long: -74.006,
-    date: '2022-01-01',
-    conditions: 'sunny',
-    icon: '01d',
-    temp: 25,
-    humidity: 50,
-    windspeed: 10,
-    days: [],
-  },
-];
+import { DEFAULT_STATE } from '../../utils/preloadedUsers';
 
 const initialState: UserInterfaceWithId[] = DEFAULT_STATE;
 
