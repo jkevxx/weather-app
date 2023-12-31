@@ -1,60 +1,134 @@
+import { Box, Card, CardActions, CardContent, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import WeatherCard from '../components/WeatherCard';
 import { useAppSelector } from '../hooks/storeHook';
+import { UserInterfaceWithId } from '../interfaces/UserInterface';
+import { getFormatDate } from '../utils/getDate';
 
 const User = () => {
   const users = useAppSelector((state) => state.users.users);
-
   const { userId } = useParams();
+  const [selectedUser, setSelectedUser] = useState<UserInterfaceWithId | null>(
+    null
+  );
+
+  useEffect(() => {
+    const userFound = users.find((user) => user.id === userId);
+
+    if (userFound) {
+      setSelectedUser(userFound);
+    }
+  }, [users, userId]);
 
   return (
-    <div>
-      <h1>User </h1>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        gap: 2,
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: 1200,
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 2,
+          mt: 2,
+        }}
+      >
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CardContent
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 2,
+            }}
+          >
+            <Typography variant="h5" sx={{ textAlign: 'center' }}>
+              {selectedUser?.conditions}
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}
+            >
+              <Box>
+                <img
+                  style={{ width: 80 }}
+                  src={`http://openweathermap.org/img/wn/${selectedUser?.icon}@2x.png`}
+                  alt={selectedUser?.conditions}
+                />
+              </Box>
+              <Box
+                sx={{
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <Typography variant="h2">{selectedUser?.temp} °</Typography>
+                <Typography>
+                  <strong>{selectedUser?.city}</strong>
+                </Typography>
+              </Box>
+            </Box>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography>Humedad: {selectedUser?.humidity}%</Typography>
+              <Typography>Viento: {selectedUser?.windspeed} mph</Typography>
+            </Box>
+            <Box sx={{ textAlign: 'right' }}>
+              <Typography>{getFormatDate(selectedUser?.date)}</Typography>
+            </Box>
+          </CardContent>
+          <CardActions>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography>
+                Nombre: <strong>{selectedUser?.name}</strong>
+              </Typography>
+              <Typography>
+                Correo: <strong>{selectedUser?.email}</strong>
+              </Typography>
+            </Box>
+          </CardActions>
+        </Card>
 
-      {users.map((user) => {
-        if (user.id === userId) {
-          return (
-            <div key={user.id}>
-              <span>{user.name} </span>
-              <span>correo: {user.email} </span>
-              <span>ciudad: {user.city} </span>
-              <span>lat: {user.lat} </span>
-              <span>long: {user.long} </span>
-              <span>fecha: {user.date} </span>
-              <span>temp: {user.temp} </span>
-              <span>humedad: {user.humidity} </span>
-              <span>viento: {user.windspeed} </span>
-              {user.days.map((day, index) => (
-                <div key={day.datetime}>
-                  <span>
-                    fecha dia {index}: {day.datetime}
-                  </span>
-                  <span>temp: {day.temp} </span>
-                  <span>humedad: {day.humidity} </span>
-                  <span>viento: {day.windspeed} </span>
-                  <span>condiciones: {day.conditions} </span>
-                </div>
-              ))}
-            </div>
-          );
-        }
-      })}
-
-      <h3>Users</h3>
-
-      {users.map((user) => (
-        <div key={user.id}>
-          <span>{user.name} </span>
-          <span>correo: {user.email} </span>
-          <span>ciudad: {user.city} </span>
-          <span>lat: {user.lat} </span>
-          <span>long: {user.long} </span>
-          <span>fecha: {user.date} </span>
-          <span>temp: {user.temp} </span>
-          <span>humedad: {user.humidity} </span>
-          <span>viento: {user.windspeed} </span>
-        </div>
-      ))}
-    </div>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 2,
+          }}
+        >
+          {selectedUser?.days.slice(1).map((day) => (
+            <WeatherCard key={day.datetime} {...day} />
+          ))}
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

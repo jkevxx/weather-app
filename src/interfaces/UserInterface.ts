@@ -9,6 +9,8 @@ export interface UserInterface {
   lat: number;
   long: number;
   date: string;
+  conditions: string;
+  icon: string;
   temp: number;
   humidity: number;
   windspeed: number;

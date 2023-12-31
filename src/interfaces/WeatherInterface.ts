@@ -1,12 +1,14 @@
 interface ConditionsInterface {
   datetimeEpoch: string;
+  conditions: string;
+  icon: string;
   temp: number;
   humidity: number;
   windspeed: number;
 }
 
 export interface WeatherApiDataInterface {
-  address: string;
+  resolvedAddress: string;
   latitude: number;
   longitude: number;
   currentConditions: ConditionsInterface;
@@ -22,5 +24,4 @@ export interface WeatherForm {
 
 export interface DaysInterface extends ConditionsInterface {
   datetime: string;
-  conditions: string;
 }
