@@ -41,7 +41,7 @@ const User = () => {
           justifyContent: 'center',
           alignItems: 'center',
           gap: 2,
-          mt: 2,
+          m: 4,
         }}
       >
         <Card
@@ -50,6 +50,7 @@ const User = () => {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
+            maxWidth: 360,
           }}
         >
           <CardContent
@@ -66,7 +67,8 @@ const User = () => {
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                alignItems: 'flex-start',
+                gap: 1,
               }}
             >
               <Box>
@@ -81,6 +83,7 @@ const User = () => {
                   textAlign: 'center',
                   display: 'flex',
                   flexDirection: 'column',
+                  maxWidth: 220,
                 }}
               >
                 <Typography variant="h2">{selectedUser?.temp} °</Typography>

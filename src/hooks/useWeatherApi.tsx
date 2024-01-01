@@ -7,7 +7,7 @@ import {
 } from '../interfaces/WeatherInterface';
 import { useGetWeatherQuery } from '../redux/api/apiSlice';
 import { getCurrentDate, getDateDashFormat, getDay5 } from '../utils/getDate';
-import { IconsDescription } from '../utils/weatherIcons';
+import { IconsDescription } from '../utils/weatherInfo';
 import useUserActions from './useUserActions';
 
 const useWeatherApi = ({ id, name, email, city }: WeatherForm) => {

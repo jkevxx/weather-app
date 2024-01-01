@@ -19,8 +19,20 @@ const WeatherCard = ({
   icon,
 }: Props) => {
   return (
-    <Card sx={{ width: 180 }}>
-      <CardContent>
+    <Card
+      sx={{
+        width: 180,
+      }}
+    >
+      <CardContent
+        sx={{
+          height: '90%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          gap: 1,
+        }}
+      >
         <Typography variant="h6" sx={{ textAlign: 'center' }}>
           {getDayOfWeek(datetime)}
         </Typography>

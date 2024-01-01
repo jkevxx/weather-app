@@ -5,6 +5,7 @@ import useApi from '../hooks/useApi';
 import { PropsSelectedUser } from '../interfaces/UserInterface';
 import { WeatherForm } from '../interfaces/WeatherInterface';
 import Alert from './Alert';
+import AlertError from './AlertError';
 import FormComp from './FormComp';
 
 interface Props {
@@ -22,7 +23,7 @@ const defaultFormData = {
 
 const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
   const [sendData, setSendData] = useState<WeatherForm>(defaultFormData);
-  const { isLoading, fetchData } = useApi(sendData);
+  const { isLoading, success, error, setError, fetchData } = useApi(sendData);
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
@@ -30,7 +31,6 @@ const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
     if (isLoading) {
       return;
     }
-    // console.log(data);
     setSendData(data);
     setSnackbarMessage(`Usuario ${data.name} creado con éxito`);
     setIsSnackbarOpen(true);
@@ -41,12 +41,10 @@ const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
     if (isLoading) {
       return;
     }
-    // console.log(data);
     setSendData((prevData) => ({ ...prevData, ...data }));
     await fetchData();
     setSnackbarMessage(`Usuario ${data.name} actualizado con éxito`);
     setIsSnackbarOpen(true);
-    console.log(snackbarMessage);
     onClose();
   };
 
@@ -95,11 +93,15 @@ const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
         </DialogContent>
       </Dialog>
 
-      <Alert
-        isAlertOpen={isSnackbarOpen}
-        handleClose={() => setIsSnackbarOpen(false)}
-        message={snackbarMessage}
-      />
+      {success && (
+        <Alert
+          isAlertOpen={isSnackbarOpen}
+          handleClose={() => setIsSnackbarOpen(false)}
+          message={snackbarMessage}
+        />
+      )}
+
+      <AlertError handleOpen={error} handleClose={() => setError(false)} />
     </>
   );
 };

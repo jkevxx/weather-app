@@ -85,8 +85,10 @@ const TableBodyComp = () => {
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
+                      justifyContent: 'space-between',
                       gap: 1,
                       cursor: 'pointer',
+                      width: '70%',
                     }}
                     onClick={() => handleRedirect(user.id)}
                   >

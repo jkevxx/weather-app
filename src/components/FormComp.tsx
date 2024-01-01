@@ -15,7 +15,6 @@ const BootstrapInput = styled(InputBase)(() => ({
     borderRadius: 6,
     marginBottom: '14px',
     padding: '10px 12px',
-    // transition: ['border-color', 'background-color', 'box-shadow'],
     fontFamily: [
       '-apple-system',
       'BlinkMacSystemFont',
@@ -25,7 +24,6 @@ const BootstrapInput = styled(InputBase)(() => ({
     ].join(','),
     '&:focus': {
       boxShadow: `#2196f3 0 0 0 0.2rem`,
-      // borderColor: 'hsla(207, 66.70%, 65.90%, 0.85)',
     },
   },
 }));

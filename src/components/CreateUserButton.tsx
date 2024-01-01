@@ -1,9 +1,9 @@
 import AddBoxIcon from '@mui/icons-material/AddBox';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import ModalComp from './ModalComp';
 
-const DialogComp = () => {
+const CreateUserButton = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -15,7 +15,15 @@ const DialogComp = () => {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        maxWidth: 800,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+      }}
+    >
       <Button
         onClick={handleOpenDialog}
         variant="contained"
@@ -29,8 +37,8 @@ const DialogComp = () => {
         onClose={handleCloseDialog}
         isSelectedUser={null}
       />
-    </>
+    </Box>
   );
 };
 
-export default DialogComp;
+export default CreateUserButton;
