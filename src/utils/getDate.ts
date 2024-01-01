@@ -35,6 +35,22 @@ export const getDateDashFormat = (dateTime: string) => {
   return dateDashFormatConverted;
 };
 
+export const getDayMonthYearFormat = (dateTime: string) => {
+  const [year, month, day] = dateTime.split('-');
+
+  const dateObject = new Date(
+    Date.UTC(Number(year), Number(month) - 1, Number(day))
+  );
+
+  const formattedYear = dateObject.getUTCFullYear();
+  const formattedMonth = String(dateObject.getUTCMonth() + 1).padStart(2, '0');
+  const formattedDay = String(dateObject.getUTCDate()).padStart(2, '0');
+
+  const formattedDate = `${formattedDay}-${formattedMonth}-${formattedYear}`;
+
+  return formattedDate;
+};
+
 export const getFormatDate = (dateString: string | undefined) => {
   if (!dateString) {
     return '';

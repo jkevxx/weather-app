@@ -1,13 +1,13 @@
 import { TableCell, TableHead, TableRow } from '@mui/material';
 
 const columns = [
-  { id: 'name', label: 'Nombre', minWidth: 140 },
-  { id: 'lat', label: 'Latitud', minWidth: 80 },
-  { id: 'long', label: 'Longitud', minWidth: 80 },
+  { id: 'name', label: 'Nombre', minWidth: 120 },
+  { id: 'lat', label: 'Latitud', minWidth: 70 },
+  { id: 'long', label: 'Longitud', minWidth: 70 },
   {
     id: 'buttons',
     label: 'Acciones',
-    minWidth: 170,
+    minWidth: 100,
   },
 ];
 

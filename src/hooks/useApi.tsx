@@ -5,13 +5,20 @@ import {
   WeatherApiDataInterface,
   WeatherForm,
 } from '../interfaces/WeatherInterface';
-import { getCurrentDate, getDateDashFormat, getDay5 } from '../utils/getDate';
-import { IconsDescription } from '../utils/weatherIcons';
+import {
+  getCurrentDate,
+  getDateDashFormat,
+  getDay5,
+  getDayMonthYearFormat,
+} from '../utils/getDate';
+import { IconsDescription, weatherTranslations } from '../utils/weatherInfo';
 import useUserActions from './useUserActions';
 
 const useApi = ({ id, name, email, city }: WeatherForm) => {
   const { addUser, updateUser } = useUserActions();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const fetchData = async () => {
     if (!city) {
@@ -27,9 +34,15 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
           import.meta.env.VITE_REACT_APP_KEY
         }&contentType=json`
       );
+
       if (!response.ok) {
+        setError(true);
         throw new Error('Failed to fetch data');
+      } else {
+        setError(false);
+        setSuccess(true);
       }
+
       const result = await response.json();
 
       const { resolvedAddress, latitude, longitude, currentConditions, days } =
@@ -41,11 +54,11 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
       const dayProperties = days.map((day: DaysInterface) => {
         return {
           datetimeEpoch: day.datetimeEpoch,
-          datetime: getDateDashFormat(day.datetimeEpoch),
+          datetime: getDayMonthYearFormat(day.datetime),
           temp: day.temp,
           humidity: day.humidity,
           windspeed: day.windspeed,
-          conditions: day.conditions,
+          conditions: getWeatherTranslation(day.conditions),
           icon: getIconId(day.conditions),
         };
       });
@@ -57,7 +70,7 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
         lat: latitude,
         long: longitude,
         date: getDateDashFormat(datetimeEpoch),
-        conditions,
+        conditions: getWeatherTranslation(conditions),
         icon: getIconId(conditions),
         temp,
         humidity,
@@ -71,7 +84,7 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
         addUser(weatherInfo);
       }
     } catch (err) {
-      console.log(err || 'An error occurred');
+      console.log(err);
     } finally {
       setIsLoading(false);
     }
@@ -84,11 +97,21 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
     return matchingIcon?.icon || '';
   };
 
+  const getWeatherTranslation = (keyword: string) => {
+    const matchingTranslation = weatherTranslations.find((translationObj) =>
+      translationObj.keywords.some(
+        (kw) => kw.toLowerCase() === keyword.toLowerCase()
+      )
+    );
+
+    return matchingTranslation?.translation || keyword;
+  };
+
   useEffect(() => {
     fetchData();
   }, [city, id]);
 
-  return { isLoading, fetchData };
+  return { isLoading, success, error, setError, fetchData };
 };
 
 export default useApi;

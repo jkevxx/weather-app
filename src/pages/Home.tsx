@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import DialogComp from '../components/DialogComp';
+import CreateUserButton from '../components/CreateUserButton';
 import TableComp from '../components/TableComp';
 
 const Home = () => {
@@ -15,17 +15,7 @@ const Home = () => {
           gap: 2,
         }}
       >
-        <Box
-          sx={{
-            maxWidth: 900,
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-end',
-            alignItems: 'center',
-          }}
-        >
-          <DialogComp />
-        </Box>
+        <CreateUserButton />
 
         <TableComp />
       </Box>
