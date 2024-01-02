@@ -85,7 +85,7 @@ const TableBodyComp = () => {
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
+                      justifyContent: 'flex-start',
                       gap: 1,
                       cursor: 'pointer',
                       width: '70%',

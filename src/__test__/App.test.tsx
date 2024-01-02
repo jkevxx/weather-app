@@ -1,20 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, test } from 'vitest';
-
 import { Provider } from 'react-redux';
+import { describe, expect, test } from 'vitest';
 import App from '../App';
 import { store } from '../redux/store';
 
 describe('App', () => {
-  // test('should render', () => {
-  //   render(
-  //     <Provider store={store}>
-  //       <App />
-  //     </Provider>
-  //   );
-  // });
-
   test('should add a user', async () => {
     const user = userEvent.setup();
     render(
@@ -61,12 +52,7 @@ describe('App', () => {
     );
     expect(userAdded).toBeDefined();
 
-    // check if the alert message appeared
-    // const successAlert = await screen.findByText(
-    //   'Usuario User Test creado con éxito',
-    //   {},
-    //   { timeout: 6000 }
-    // );
+    // find the success alert
     const successAlert = screen.getByText('Usuario User Test creado con éxito');
     expect(successAlert).toBeDefined();
   });

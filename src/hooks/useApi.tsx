@@ -83,6 +83,7 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
       } else {
         addUser(weatherInfo);
       }
+      console.log(weatherInfo);
     } catch (err) {
       console.log(err);
     } finally {
