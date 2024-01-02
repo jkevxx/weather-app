@@ -73,7 +73,7 @@ const FormComp = ({ selectedUser, onCreate, onUpdate, onClose }: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} autoComplete={'off'}>
+    <form onSubmit={handleSubmit} autoComplete={'off'} aria-label="add user">
       <BootstrapInput
         id="name"
         name="name"
