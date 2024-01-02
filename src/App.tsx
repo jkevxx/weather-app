@@ -11,7 +11,6 @@ function App() {
           body: { backgroundColor: '#555b67', color: '#fff', margin: 0 },
         }}
       />
-      {/* <CssBaseline /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />

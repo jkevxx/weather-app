@@ -48,14 +48,6 @@ const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
     onClose();
   };
 
-  // useEffect(() => {
-  //   const timerId = setTimeout(() => {
-  //     setIsSnackbarOpen(false);
-  //   }, 5000);
-
-  //   return () => clearTimeout(timerId);
-  // }, [isSnackbarOpen]);
-
   return (
     <>
       <Dialog open={open} onClose={onClose}>
