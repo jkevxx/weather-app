@@ -39,7 +39,7 @@ type Props = {
   selectedUser: PropsSelectedUser | null;
   onClose: () => void;
   onCreate: (data: WeatherForm) => void;
-  onUpdate: (data: WeatherForm) => Promise<void>;
+  onUpdate: (data: WeatherForm) => void;
 };
 
 const FormComp = ({ selectedUser, onCreate, onUpdate, onClose }: Props) => {
@@ -63,7 +63,7 @@ const FormComp = ({ selectedUser, onCreate, onUpdate, onClose }: Props) => {
     e.preventDefault();
 
     if (formData.id) {
-      await onUpdate(formData);
+      onUpdate(formData);
     } else {
       onCreate(formData);
     }

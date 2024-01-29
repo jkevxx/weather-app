@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { UserInterface } from '../interfaces/UserInterface';
 import {
   DaysInterface,
@@ -12,15 +12,13 @@ import {
   getDayMonthYearFormat,
 } from '../utils/getDate';
 import { IconsDescription, weatherTranslations } from '../utils/weatherInfo';
-import useUserActions from './useUserActions';
 
-const useApi = ({ id, name, email, city }: WeatherForm) => {
-  const { addUser, updateUser } = useUserActions();
+const useApi = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = async ({ name, email, city }: WeatherForm) => {
     if (!city) {
       return;
     }
@@ -78,12 +76,7 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
         days: dayProperties,
       };
 
-      if (id) {
-        updateUser({ ...weatherInfo, id });
-      } else {
-        addUser(weatherInfo);
-      }
-      console.log(weatherInfo);
+      return weatherInfo;
     } catch (err) {
       console.log(err);
     } finally {
@@ -107,10 +100,6 @@ const useApi = ({ id, name, email, city }: WeatherForm) => {
 
     return matchingTranslation?.translation || keyword;
   };
-
-  useEffect(() => {
-    fetchData();
-  }, [city, id]);
 
   return { isLoading, success, error, setError, fetchData };
 };

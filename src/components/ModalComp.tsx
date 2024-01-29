@@ -2,6 +2,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { useState } from 'react';
 import useApi from '../hooks/useApi';
+import useUserActions from '../hooks/useUserActions';
 import { PropsSelectedUser } from '../interfaces/UserInterface';
 import { WeatherForm } from '../interfaces/WeatherInterface';
 import Alert from './Alert';
@@ -14,35 +15,33 @@ interface Props {
   isSelectedUser: PropsSelectedUser | null;
 }
 
-const defaultFormData = {
-  id: '',
-  name: '',
-  email: '',
-  city: '',
-};
-
 const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
-  const [sendData, setSendData] = useState<WeatherForm>(defaultFormData);
-  const { isLoading, success, error, setError, fetchData } = useApi(sendData);
+  const { addUser, updateUser } = useUserActions();
+  const { isLoading, success, error, setError, fetchData } = useApi();
   const [isSnackbarOpen, setIsSnackbarOpen] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const createUser = (data: WeatherForm) => {
-    if (isLoading) {
+  const createUser = async (data: WeatherForm) => {
+    const weatherData = await fetchData(data);
+
+    if (isLoading || !weatherData) {
       return;
     }
-    setSendData(data);
+
+    addUser(weatherData);
     setSnackbarMessage(`Usuario ${data.name} creado con éxito`);
     setIsSnackbarOpen(true);
     onClose();
   };
 
-  const updateUser = async (data: WeatherForm) => {
-    if (isLoading) {
+  const updateUserById = async (data: WeatherForm) => {
+    const weatherData = await fetchData(data);
+
+    if (isLoading || !weatherData || !data.id) {
       return;
     }
-    setSendData((prevData) => ({ ...prevData, ...data }));
-    await fetchData();
+
+    updateUser({ ...weatherData, id: data.id });
     setSnackbarMessage(`Usuario ${data.name} actualizado con éxito`);
     setIsSnackbarOpen(true);
     onClose();
@@ -79,7 +78,7 @@ const ModalComp = ({ open, onClose, isSelectedUser }: Props) => {
           <FormComp
             selectedUser={isSelectedUser}
             onCreate={createUser}
-            onUpdate={updateUser}
+            onUpdate={updateUserById}
             onClose={onClose}
           />
         </DialogContent>
